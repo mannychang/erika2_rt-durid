@@ -3,7 +3,7 @@ package com.eu.evidence.rtdruid.internal.modules.oil.codewriter.erikaenterprise;
 import com.eu.evidence.rtdruid.internal.modules.oil.keywords.IWritersKeywords;
 import com.eu.evidence.rtdruid.modules.oil.erikaenterprise.interfaces.IMacrosForSharedData;
 
-public class MacrosForSharedData implements IMacrosForSharedData {
+public class MacrosForMPC5777C_SharedData implements IMacrosForSharedData {
 
 	final String indent1 = IWritersKeywords.INDENT;
 
@@ -55,44 +55,28 @@ public class MacrosForSharedData implements IMacrosForSharedData {
 		public String vectorRam(String type, String vectorName, String array, String body) {
 //			addElement("EE_SHARED_IDATA", "mcglobald", vectorName);
 //			return type + vectorName+array +body;
-			return "#pragma section EE_SHARED_BEGIN /* allocate into initialized shared data section */\n" +
-					"#pragma section EE_SHARED_FAST_BEGIN /* allocate into initialized shared fast data section */\n" +
-					type +vectorName+array+body+
-					"#pragma section EE_SHARED_FAST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_END /* pragma tail */\n";
+			return type +vectorName+array+body;
 		}
 
 		@Override
 		public String vectorRom(String type, String vectorName, String array, String body) {
 //			addElement("EE_SHARED_IDATA", "mcglobald", vectorName);
 //			return type + vectorName+array+body;
-			return "#pragma section EE_SHARED_BEGIN /* allocate into initialized shared data section */\n" +
-					"#pragma section EE_SHARED_FAST_BEGIN /* allocate into initialized shared fast data section */\n" +
-					type +vectorName+array+body+
-					"#pragma section EE_SHARED_FAST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_END /* pragma tail */\n";
+			return type +vectorName+array+body;
 		}
 
 		@Override
 		public String constVectorRam(String type, String vectorName, String array, String body) {
 			//addElement("EE_SHARED_CDATA", "mcglobalc", vectorName);
 			//return vectorName+array;
-			return "#pragma section EE_SHARED_CONST_BEGIN /* allocate into shared const data section */\n" +
-//					"#pragma section EE_SHARED_SCONST_BEGIN /* allocate into shared sconst data section */\n" +
-					type + vectorName+array+body+
-//					"#pragma section EE_SHARED_SCONST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_CONST_END /* pragma tail */\n";
+			return type + vectorName+array+body;
 		}
 
 		@Override
 		public String constVectorRom(String type, String vectorName, String array, String body) {
 //			addElement("EE_SHARED_CDATA", "mcglobalc", vectorName);
 //			return vectorName+array;
-			return "#pragma section EE_SHARED_CONST_BEGIN /* allocate into shared const data section */\n" +
-					"#pragma section EE_SHARED_SCONST_BEGIN /* allocate into shared sconst data section */\n" +
-					type +vectorName+array+body+
-					"#pragma section EE_SHARED_SCONST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_CONST_END /* pragma tail */\n";
+			return type +vectorName+array+body;
 		}
 
 		@Override
@@ -104,54 +88,53 @@ public class MacrosForSharedData implements IMacrosForSharedData {
 		public String valueRam(String type, String valueName, String body) {
 //			addElement("EE_SHARED_IDATA", "mcglobald", valueName);
 //			return type + valueName+body;
-			return "#pragma section EE_SHARED_BEGIN /* allocate into initialized shared data section */\n" +
-					"#pragma section EE_SHARED_FAST_BEGIN /* allocate into initialized shared fast data section */\n" +
-					type +valueName+body+
-					"#pragma section EE_SHARED_FAST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_END /* pragma tail */\n";
+			return type +valueName+body;
 		}
 
 		@Override
 		public String valueRom(String type, String valueName, String body) {
 //			addElement("EE_SHARED_IDATA", "mcglobald", valueName);
 //			return type + valueName+body;
-			return "#pragma section EE_SHARED_BEGIN /* allocate into initialized shared data section */\n" +
-					"#pragma section EE_SHARED_FAST_BEGIN /* allocate into initialized shared fast data section */\n" +
-					type +valueName+body+
-					"#pragma section EE_SHARED_FAST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_END /* pragma tail */\n";
+			return type +valueName+body;
 		}
 
 		@Override
 		public String constValueRam(String type, String valueName, String body) {
 //			addElement("EE_SHARED_CDATA", "mcglobalc", valueName);
 //			return type + valueName+body;
-			return "#pragma section EE_SHARED_CONST_BEGIN /* allocate into shared const data section */\n" +
-					"#pragma section EE_SHARED_SCONST_BEGIN /* allocate into shared sconst data section */\n" +
-					type +valueName+body+
-					"#pragma section EE_SHARED_SCONST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_CONST_END /* pragma tail */\n";
+			return type +valueName+body;
 		}
 
 		@Override
 		public String constValueRom(String type, String valueName, String body) {
 //			addElement("EE_SHARED_CDATA", "mcglobalc", valueName);
 //			return type + valueName+body;
-			return "#pragma section EE_SHARED_CONST_BEGIN /* allocate into shared const data section */\n" +
-					"#pragma section EE_SHARED_SCONST_BEGIN /* allocate into shared sconst data section */\n" +
-					type +valueName+body+
-					"#pragma section EE_SHARED_SCONST_END /* pragma tail */\n" +
-					"#pragma section EE_SHARED_CONST_END /* pragma tail */\n";
+			return type +valueName+body;
 		}
 
 		@Override
 		public String getHeader() {
-			return "";
+			return 
+					"\n#if defined(EE_CURRENTCPU) && (EE_CURRENTCPU == 0)\n" +
+					"#pragma section EE_DATA_BEGIN\n" +
+					"#pragma section EE_SDATA_MASTER_BEGIN\n" +
+					"#pragma section EE_CONST_BEGIN\n" +
+					"#pragma section EE_SCONST_MASTER_BEGIN\n" +
+					"#else\n" +
+					"#pragma section EE_DATA_BEGIN\n" +
+					"#pragma section EE_SDATA_SLAVE_BEGIN\n" +
+					"#pragma section EE_CONST_BEGIN\n" +
+					"#pragma section EE_SCONST_SLAVE_BEGIN\n" +
+					"#endif\n\n";
 		}
 
 		@Override
 		public String getFooter() {
-			return "";
+			return 
+					"\n\n#pragma section EE_DATA_END\n" +
+					"#pragma section EE_SDATA_END\n" +
+					"#pragma section EE_CONST_END\n" +
+					"#pragma section EE_SCONST_END\n";
 		}
 
 	}
@@ -163,7 +146,7 @@ public class MacrosForSharedData implements IMacrosForSharedData {
 	
 	@Override
 	public String vectorRamUnitialized(String type, String vectorName, String array, String body) {
-		return type + "EE_SHARED_UDATA "+vectorName+array + body;
+		return vectorRam(type, vectorName, array, body);
 	}
 	
 	@Override
@@ -188,7 +171,7 @@ public class MacrosForSharedData implements IMacrosForSharedData {
 
 	@Override
 	public String valueRamUnitialized(String type, String valueName, String body) {
-		return type + "EE_SHARED_UDATA "+valueName + body;
+		return valueRam(type, valueName, body);
 	}
 	
 	@Override
